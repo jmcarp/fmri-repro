@@ -1,0 +1,20 @@
+strict digraph  {
+	"skull_strip (fsl)" -> "coregister (fsl)";
+	"normalize_warp (fsl)" -> "apply_warp (fsl)";
+	"normalize_warp (fsl)" -> "datasink (io)";
+	"infosource (utility)" -> "datasink (io)";
+	"infosource (utility)" -> "datasource (io)";
+	"normalize_affine (fsl)" -> "apply_warp (fsl)";
+	"normalize_affine (fsl)" -> "normalize_warp (fsl)";
+	"smooth (fsl)" -> "datasink (io)";
+	"apply_warp (fsl)" -> "smooth (fsl)";
+	"extractref (fsl)" -> "realign (fsl)";
+	"extractref (fsl)" -> "coregister (fsl)";
+	"coregister (fsl)" -> "normalize_warp (fsl)";
+	"coregister (fsl)" -> "normalize_affine (fsl)";
+	"realign (fsl)" -> "apply_warp (fsl)";
+	"img2float (fsl)" -> "extractref (fsl)";
+	"img2float (fsl)" -> "realign (fsl)";
+	"datasource (io)" -> "skull_strip (fsl)";
+	"datasource (io)" -> "img2float (fsl)";
+}

@@ -1,0 +1,33 @@
+digraph structs {
+node [shape=record];
+preprocinfosource [label="{IN}|{ infosource | utility |  }|{OUT|<outsubjectid> subject_id}"];
+preprocdatasource [label="{IN|<insubjectid> subject_id}|{ datasource | io |  }|{OUT|<outanat> anat|<outbold> bold}"];
+preprocimg2float [label="{IN|<ininfile> in_file}|{ img2float | fsl |  }|{OUT|<outoutfile> out_file}"];
+preprocextractref [label="{IN|<ininfile> in_file}|{ extractref | fsl |  }|{OUT|<outroifile> roi_file}"];
+preprocrealign [label="{IN|<ininfile> in_file|<inreffile> ref_file}|{ realign | fsl |  }|{OUT|<outoutfile> out_file}"];
+preprocskull_strip [label="{IN|<ininfile> in_file}|{ skull_strip | fsl |  }|{OUT|<outoutfile> out_file}"];
+preproccoregister [label="{IN|<ininfile> in_file|<inreference> reference}|{ coregister | fsl |  }|{OUT|<outoutfile> out_file}"];
+preprocnormalize_affine [label="{IN|<ininfile> in_file}|{ normalize_affine | fsl |  }|{OUT|<outoutmatrixfile> out_matrix_file}"];
+preprocnormalize_warp [label="{IN|<inaffinefile> affine_file|<ininfile> in_file}|{ normalize_warp | fsl |  }|{OUT|<outfieldfile> field_file|<outwarpedfile> warped_file}"];
+preprocapply_warp [label="{IN|<infieldfile> field_file|<ininfile> in_file|<inpremat> premat}|{ apply_warp | fsl |  }|{OUT|<outoutfile> out_file}"];
+preprocsmooth [label="{IN|<ininfile> in_file}|{ smooth | fsl |  }|{OUT|<outoutfile> out_file}"];
+preprocdatasink [label="{IN|<incontainer> container|<innormanat> norm_anat|<insmoothfunc> smooth_func}|{ datasink | io |  }|{OUT}"];
+preprocapply_warp:outoutfile:e -> preprocsmooth:ininfile:w;
+preproccoregister:outoutfile:e -> preprocnormalize_affine:ininfile:w;
+preproccoregister:outoutfile:e -> preprocnormalize_warp:ininfile:w;
+preprocdatasource:outanat:e -> preprocskull_strip:ininfile:w;
+preprocdatasource:outbold:e -> preprocimg2float:ininfile:w;
+preprocextractref:outroifile:e -> preproccoregister:inreference:w;
+preprocextractref:outroifile:e -> preprocrealign:inreffile:w;
+preprocimg2float:outoutfile:e -> preprocextractref:ininfile:w;
+preprocimg2float:outoutfile:e -> preprocrealign:ininfile:w;
+preprocinfosource:outsubjectid:e -> preprocdatasink:incontainer:w;
+preprocinfosource:outsubjectid:e -> preprocdatasource:insubjectid:w;
+preprocnormalize_affine:outoutmatrixfile:e -> preprocapply_warp:inpremat:w;
+preprocnormalize_affine:outoutmatrixfile:e -> preprocnormalize_warp:inaffinefile:w;
+preprocnormalize_warp:outfieldfile:e -> preprocapply_warp:infieldfile:w;
+preprocnormalize_warp:outwarpedfile:e -> preprocdatasink:innormanat:w;
+preprocrealign:outoutfile:e -> preprocapply_warp:ininfile:w;
+preprocskull_strip:outoutfile:e -> preproccoregister:ininfile:w;
+preprocsmooth:outoutfile:e -> preprocdatasink:insmoothfunc:w;
+}
