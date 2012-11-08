@@ -1,3 +1,9 @@
+# Paths
+datadir = '/home/brain/bart/data'
+repodir = '/home/brain/bart/fmri-repro'
+figdir = '%s/fig' % (repodir)
+dotdir = '%s/dot' % (repodir)
+
 # Import built-in modules
 import os
 import glob
@@ -8,12 +14,6 @@ import nipype.interfaces.fsl as fsl          # fsl
 import nipype.interfaces.utility as util     # utility
 import nipype.pipeline.engine as pe          # pipeline engine
 from nipype.interfaces import io             # io
-
-# Paths
-datadir = '/home/brain/bart/data'
-repodir = '/home/brain/bart/fmri-repro'
-figdir = '%s/fig' % (repodir)
-dotdir = '%s/dot' % (repodir)
 
 # Parameters
 normtemp = '/usr/share/data/fsl-mni152-templates/MNI152_T1_2mm_brain.nii.gz'
@@ -169,15 +169,23 @@ preproc.connect(infosource, 'subject_id', datasink, 'container')
 preproc.connect(smooth, 'out_file', datasink, 'smooth_func')
 preproc.connect(normalize_warp, 'warped_file', datasink, 'norm_anat')
 
-#################
-# Make schemata #
-#################
+def make_schemata(preproc):
+  'Write schemata files for pipeline'
 
-# Make .dot / .png files
-preproc.write_graph('preproc', graph2use='orig')
+  # Make .dot / .png files
+  preproc.write_graph('preproc', graph2use='orig')
 
-# Move .dot / .png files
-os.rename('preproc.dot', '%s/preproc.dot' % dotdir)
-os.rename('preproc_detailed.dot', '%s/preproc_detailed.dot' % dotdir)
-os.rename('preproc.dot.png', '%s/preproc.dot.png' % figdir)
-os.rename('preproc_detailed.dot.png', '%s/preproc_detailed.dot.png' % figdir)
+  # Move .dot / .png files
+  os.rename('preproc.dot', '%s/preproc.dot' % dotdir)
+  os.rename('preproc_detailed.dot', '%s/preproc_detailed.dot' % dotdir)
+  os.rename('preproc.dot.png', '%s/preproc.dot.png' % figdir)
+  os.rename('preproc_detailed.dot.png', '%s/preproc_detailed.dot.png' % figdir)
+
+def run_preproc(preproc):
+  'Run pipeline'
+
+  # Run pipeline
+  preproc.run()
+
+  # Delete report
+  shutil.rmtree('preproc')
