@@ -6,6 +6,7 @@ dotdir = '%s/dot' % (repodir)
 
 # Import built-in modules
 import os
+import sys
 import glob
 import shutil
 
@@ -189,3 +190,11 @@ def run_preproc(preproc):
 
   # Delete report
   shutil.rmtree('preproc')
+
+# Run from command line
+if __name__ == '__main__':
+  if len(sys.argv) > 1:
+    if sys.argv[1] == 'plot':
+      make_schemata(preproc)
+    elif sys.argv[1] == 'run':
+      run_preproc(preproc)

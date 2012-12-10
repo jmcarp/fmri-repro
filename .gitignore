@@ -1,3 +1,9 @@
+# Custon .gitignore
+
+data
+
+# Default python .gitignore
+
 *.py[co]
 
 # Packages
