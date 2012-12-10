@@ -1,8 +1,9 @@
 # Paths
-datadir = '/home/brain/bart/data'
-repodir = '/home/brain/bart/fmri-repro'
-figdir = '%s/fig' % (repodir)
-dotdir = '%s/dot' % (repodir)
+homedir = '/home/brain/fmri-repro'
+datadir = '%s/data' % (homedir)
+outdir = '%s/out' % (homedir)
+figdir = '%s/fig' % (homedir)
+dotdir = '%s/dot' % (homedir)
 
 # Import built-in modules
 import os
@@ -165,7 +166,7 @@ datasink = pe.Node(
   interface=io.DataSink(),
   name='datasink'
 )
-datasink.inputs.base_directory = '%s/out' % (datadir)
+datasink.inputs.base_directory = outdir
 preproc.connect(infosource, 'subject_id', datasink, 'container')
 preproc.connect(smooth, 'out_file', datasink, 'smooth_func')
 preproc.connect(normalize_warp, 'warped_file', datasink, 'norm_anat')
