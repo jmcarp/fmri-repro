@@ -1,6 +1,7 @@
 # Custon .gitignore
 
 data
+out
 
 # Default python .gitignore
 
